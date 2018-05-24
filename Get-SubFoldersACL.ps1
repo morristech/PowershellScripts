@@ -2,7 +2,7 @@
     [string]$FolderPath = $( Read-Host "Folder Path" )
 )
 
-$FolderList = Get-ChildItem $FolderPath 
+$FolderList = Get-ChildItem $FolderPath | where-object { $_.PSIScontainer }
 $ExcludedUsers = @("NT AUTHORITY\SYSTEM", "NT AUTHORITY\SYSTEM", "CREATOR OWNER", "BUILTIN\Administrators")
 $ACLReport = @();
 
