@@ -1,2 +1,3 @@
 $mailbox = Read-Host 'Mailbox Name ?' 
-Set-MailboxFolderPermission -Identity '$mailbox:\Calendar' -User "Default" -AccessRights "Reviewer"
+$identity = $mailbox + ":\Calendar"
+Set-MailboxFolderPermission -Identity $identity -User "Default" -AccessRights "Reviewer"
