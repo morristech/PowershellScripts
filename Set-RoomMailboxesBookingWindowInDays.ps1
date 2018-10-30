@@ -1,0 +1,1 @@
+Get-MailBox | Where {$_.ResourceType -eq "Room"} | Set-CalendarProcessing -BookingWindowInDays 360
