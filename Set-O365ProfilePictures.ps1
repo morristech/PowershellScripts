@@ -37,22 +37,24 @@ Import-PSSession $Session
 $UsersActive = Get-User -RecipientTypeDetails UserMailbox -ResultSize Unlimited | where {$_.UseraccountControl -notlike “*accountdisabled*”}
 
 # Checking if there is a picture for each active user and uploading it if so
-foreach($User in $UsersActive)
-    {
-        $PicturePath = $PictureFolder + "\" + $User.UserPrincipalName + "." + $PictureExt
+foreach($User in $UsersActive){
 
-        write-host "Looking for an image for : " + $User.DisplayName
-       
-        if(Test-Path $PicturePath)
-            {
-                write-host "Image exists : " + $PicturePath
-        
-                # INSERT IMAGE RESIZING HERE
-            
-                write-host "Updating " $User.DisplayName " image with: " $PicturePath
-                Set-UserPhoto -Identity $User.UserPrincipalName -PictureData ([System.IO.File]::ReadAllBytes($PicturePath)) -Confirm:$false 
-            }
-    }
+	$PicturePath = $PictureFolder + "\" + $User.UserPrincipalName + "." + $PictureExt
 
-#  End of Log
+	write-host "Looking for an image for : " + $User.DisplayName
+   
+	if(Test-Path $PicturePath){
+		write-host "Image exists : " + $PicturePath
+	
+		# INSERT IMAGE RESIZING HERE
+		
+		write-host "Updating " $User.DisplayName " image with: " $PicturePath
+		Set-UserPhoto -Identity $User.UserPrincipalName -PictureData ([System.IO.File]::ReadAllBytes($PicturePath)) -Confirm:$false 
+	}
+	else{
+		write-host -ForegroundColor DarkYellow "No image available for: " $User.DisplayName
+	}
+}
+
+# End of Log
 Stop-Transcript 
