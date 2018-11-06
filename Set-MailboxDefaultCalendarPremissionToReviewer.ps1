@@ -1,3 +1,7 @@
 $mailbox = Read-Host 'Mailbox Name ?' 
-$identity = $mailbox + ":\Calendar"
+
+$calendars = Get-MailboxFolderStatistics $mailbox -FolderScope Calendar
+
+$identity = $mailbox + ":\" + $calendars[0].Name
+
 Set-MailboxFolderPermission -Identity $identity -User "Default" -AccessRights "Reviewer"
