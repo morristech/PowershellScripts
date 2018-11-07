@@ -30,6 +30,24 @@ Class Log {
         FUNCTIONS
     ##===================================================================================#>  
 
+    # Stripping trailing characters
+    [string] CleanString ($line){
+        $logLine = $line
+        $logLine = $logLine -replace "`t|`n|`r",""
+        $logLine = $logLine -replace " ;|; ",";"
+
+        return $logLine
+    }
+
+    [void] WriteMultipleLines([string] $messages){
+        $lines = $messages.Split("`n`r")
+
+        Foreach ($line in $lines){
+            this.Write($line, [LogType].Message, $this.WriteToHost, $this.WriteTime)
+		}
+
+    }
+
     [void] Write ([string]$message, [LogType] $type, [bool]$writetohost, [bool]$writetime) {
 
         $logLine = $message
@@ -37,10 +55,8 @@ Class Log {
         if($writetime){
             $logLine = (Get-Date -UFormat $this.TimeFormat) + " " + $logLine
         }
-        
-        # Stripping trailing characters
-        $logLine = $logLine -replace "`t|`n|`r",""
-        $logLine = $logLine -replace " ;|; ",";"
+              
+        $logLine = $this.CleanString($logLine)
     
         Add-Content $this.OutputFile $logLine
 
